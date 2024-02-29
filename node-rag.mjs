@@ -18,6 +18,12 @@ const modelPath = path.join(__dirname, "models", "mistral-7b-instruct-v0.1.Q5_K_
 //const modelPath = path.join(__dirname, "models", "llama-2-7b-chat.Q4_K_M.gguf");
 
 
+////////////////////////////////
+// LOAD AUGMENTING DATA
+// typically this is stored in a database versus being loaded every time
+
+console.log("Loading and processing augmenting data - " + new Date());
+
 const docLoader = new DirectoryLoader(
   "./SOURCE_DOCUMENTS",
   {
@@ -40,7 +46,21 @@ const vectorStore = await MemoryVectorStore.fromDocuments(
 );
 const retriever = await vectorStore.asRetriever();
 
-const model = await new LlamaCpp({ modelPath: modelPath });
+console.log("Augmenting data loaded - " + new Date());
+
+
+////////////////////////////////
+// LOAD MODEL
+
+console.log("Loading model - " + new Date());
+
+const model = await new LlamaCpp({ modelPath: modelPath,
+                                   gpuLayers: 64 });
+
+console.log("Model loaded - " + new Date());
+
+////////////////////////////////
+// CREATE CHAIN and ask questions
 
 const prompt =
   ChatPromptTemplate.fromTemplate(`Answer the following question based only on the provided context, if you don't know the answer say so:
@@ -61,8 +81,20 @@ const retrievalChain = await createRetrievalChain({
   retriever,
 });
 
-const result = await retrievalChain.invoke({
+console.log(new Date());
+
+let result = await retrievalChain.invoke({
   input: "Should I use npm to start a node.js application",
 });
 
 console.log(result);
+
+console.log(new Date());
+
+result = await retrievalChain.invoke({
+  input: "How do I build a good container for a Node.js application",
+});
+
+console.log(result);
+
+console.log(new Date());
