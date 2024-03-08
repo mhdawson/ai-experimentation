@@ -12,9 +12,6 @@ import { createRetrievalChain } from "langchain/chains/retrieval";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const modelPath = path.join(__dirname, "models", "mistral-7b-instruct-v0.1.Q5_K_M.gguf")
-//const modelPath = path.join(__dirname, "models", "llama-2-7b-chat.Q4_K_M.gguf");
 
 ////////////////////////////////
 // LOAD AUGMENTING DATA
@@ -38,9 +35,7 @@ const splitDocs = await splitter.splitDocuments(docs);
 
 const vectorStore = await MemoryVectorStore.fromDocuments(
   splitDocs,
-  new HuggingFaceTransformersEmbeddings({
-    modelPath: modelPath 
-  })
+  new HuggingFaceTransformersEmbeddings()
 );
 const retriever = await vectorStore.asRetriever();
 
@@ -97,6 +92,9 @@ async function getModel(type) {
   if (type === 'llama-cpp') {
     ////////////////////////////////
     // LOAD MODEL
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const modelPath = path.join(__dirname, "models", "mistral-7b-instruct-v0.1.Q5_K_M.gguf")
+    //const modelPath = path.join(__dirname, "models", "llama-2-7b-chat.Q4_K_M.gguf");
     const { LlamaCpp } = await import("@langchain/community/llms/llama_cpp");
     model = await new LlamaCpp({ modelPath: modelPath,
                                  gpuLayers: 64 });
