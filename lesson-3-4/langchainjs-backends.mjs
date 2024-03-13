@@ -38,12 +38,12 @@ const vectorStore = await MemoryVectorStore.fromDocuments(
   new HuggingFaceTransformersEmbeddings()
 );
 const retriever = await vectorStore.asRetriever();
-
 console.log("Augmenting data loaded - " + new Date());
 
 ////////////////////////////////
 // GET THE MODEL
 const model = await getModel('llama-cpp');
+
 
 ////////////////////////////////
 // CREATE CHAIN
@@ -77,12 +77,6 @@ let result = await retrievalChain.invoke({
 console.log(result);
 console.log(new Date());
 
-result = await retrievalChain.invoke({
-  input: "How do I build a good container for a Node.js application",
-});
-console.log(result);
-console.log(new Date());
-
 /////////////////////////////////////////////////
 // HELPER FUNCTIONS
 async function getModel(type) {
@@ -94,7 +88,6 @@ async function getModel(type) {
     // LOAD MODEL
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const modelPath = path.join(__dirname, "models", "mistral-7b-instruct-v0.1.Q5_K_M.gguf")
-    //const modelPath = path.join(__dirname, "models", "llama-2-7b-chat.Q4_K_M.gguf");
     const { LlamaCpp } = await import("@langchain/community/llms/llama_cpp");
     model = await new LlamaCpp({ modelPath: modelPath,
                                  batchSize: 1024,
@@ -124,6 +117,5 @@ async function getModel(type) {
       console.log('keep-alive');
     }, 5000);
   };
-
   return model;
 };
