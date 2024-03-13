@@ -43,6 +43,9 @@ console.log("Augmenting data loaded - " + new Date());
 ////////////////////////////////
 // GET THE MODEL
 const model = await getModel('llama-cpp', 0.9);
+//const model = await getModel('openAI', 0.9);
+//const model = await getModel('Openshift.ai', 0.9);
+
 
 ////////////////////////////////
 // CREATE CHAIN
@@ -111,10 +114,6 @@ async function getModel(type, temperature) {
         modelName: 'mistralai/Mistral-7B-Instruct-v0.2' },
       { baseURL: 'http://vllm.llm-hosting.svc.cluster.local:8000/v1' }
     );
-
-    setInterval(() => {
-      console.log('keep-alive');
-    }, 5000);
   };
   return model;
 };
