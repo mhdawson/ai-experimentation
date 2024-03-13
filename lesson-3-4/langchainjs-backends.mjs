@@ -42,8 +42,7 @@ console.log("Augmenting data loaded - " + new Date());
 
 ////////////////////////////////
 // GET THE MODEL
-const model = await getModel('llama-cpp');
-
+const model = await getModel('llama-cpp', 0.9);
 
 ////////////////////////////////
 // CREATE CHAIN
@@ -79,7 +78,7 @@ console.log(new Date());
 
 /////////////////////////////////////////////////
 // HELPER FUNCTIONS
-async function getModel(type) {
+async function getModel(type, temperature) {
   console.log("Loading model - " + new Date());
 
   let model;
@@ -91,7 +90,7 @@ async function getModel(type) {
     const { LlamaCpp } = await import("@langchain/community/llms/llama_cpp");
     model = await new LlamaCpp({ modelPath: modelPath,
                                  batchSize: 1024,
-                                 temperature: 0.9,
+                                 temperature: temperature,
                                  gpuLayers: 64 });
   } else if (type === 'openAI') {
     ////////////////////////////////
@@ -99,7 +98,7 @@ async function getModel(type) {
     const { ChatOpenAI } = await import("@langchain/openai");
     const key = await import('../key.json', { with: { type: 'json' } });
     model = new ChatOpenAI({
-      temperature: 0.9,
+      temperature: temperature,
       openAIApiKey: key.default.apiKey
     });
   } else if (type === 'Openshift.ai') {
@@ -107,7 +106,7 @@ async function getModel(type) {
     // Connect to OpenShift.ai endpoint
     const { ChatOpenAI } = await import("@langchain/openai");
     model = new ChatOpenAI(
-      { temperature: 0.9,
+      { temperature: temperature,
         openAIApiKey: 'EMPTY',
         modelName: 'mistralai/Mistral-7B-Instruct-v0.2' },
       { baseURL: 'http://vllm.llm-hosting.svc.cluster.local:8000/v1' }
