@@ -1,0 +1,8 @@
+{ "name": "llamaindex-otel-tracing",
+  "scripts": { "start":"node otel-tracing.mjs" },
+  "dependencies": { "@opentelemetry/exporter-metrics-otlp-http": "^0.51.1",
+                    "@traceloop/node-server-sdk": "^0.8.4",
+                    "dotenv": "^16.4.5",
+                    "llamaindex": "^0.3.1",
+                    "nodeshift": "^11.3.0" }
+}

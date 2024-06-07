@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "llamaindex": "^0.3.14"
+  },
+  "name": "ai-experimentation-lesson-7",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit",
+    "start": "node llamaindex-agent-ollama2.mjs"
+  },
+  "author": "",
+  "license": "MIT",
+  "description": ""
+}
